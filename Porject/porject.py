@@ -2,9 +2,15 @@ from tkinter import  *
 from tkinter.filedialog import askdirectory
 import tkinter as tk
 import subprocess  #to execute command in python script
+import os
+import signal
+import sys
+from tkinter import messagebox
+
+import atexit
+#  add a chkecker for windows and other operation systems to check it .. 
 root = Tk()
 frame = tk.Frame(root)
-
 
 
 root.title("Google Image Downloader")
@@ -15,6 +21,7 @@ text2.configure(yscrollcommand=scroll.set)#nasil olacagini yazdim
 text2.tag_configure('bold_italics', font=('Arial', 12, 'bold', 'italic')) 
 text2.tag_configure('big', font=('Verdana', 14))#cizge nasil olacagini bilter
 text2.insert(END,'         Google Image Downloader  ', 'big')
+
 
 
 
@@ -38,21 +45,21 @@ label4= Label( root, textvariable=var4, relief=RAISED )#key  word
 
 # label 1 ve label 3
 
-e = StringVar()#bu callback  label icin  kullandim chose path icin 
-Entry(root, width=70, textvariable=e).place(y=113,x=40)#text  icin 
-e.set(" ")
+path = StringVar()#bu callback  label icin  kullandim chose path icin 
+Entry(root, width=70, textvariable=path).place(y=113,x=40)#text  icin 
+path.set("")
 
 
 
 
-k = StringVar()#bu test  fonksiyon iciin  icin  kullandim chose path icin 
-Entry(root, textvariable=k,width=40,fg="blue",selectbackground='violet').place(y=160,x=135)#text  icin 
+keywords = StringVar()#bu test  fonksiyon iciin  icin  kullandim chose path icin 
+Entry(root, textvariable=keywords,width=40,fg="blue",selectbackground='violet').place(y=160,x=135)#text  icin 
 
 
 
 def callback():   
     name= askdirectory() #dosya acmak icin   ve yolu almak icin 
-    e.set(name)#burda text  yazdiriyorum    
+    path.set(name)#burda text  yazdiriyorum    
     
     
 text2.pack()
@@ -60,8 +67,15 @@ text2.pack()
 
 
 
+
 def  fetch():#ikinci fonksiyon  bir harf yazmak icin  
-    subprocess.Popen(k.get(), shell=True) #burada value alip  gonderiyor 
+    
+    if path.get() != "":
+        pythonCode =subprocess.Popen("py google_images_download.py  -k \"" + keywords.get() +"\" -o "+ path.get() ,  shell=True ) #burada value alip  gonderiyor 
+    else :
+        pythonCode =subprocess.Popen("py google_images_download.py  -k\"" + keywords.get()+"\"" ,shell=True)
+    
+ 
 
 
 
@@ -82,6 +96,12 @@ Button(text=' Download ', command=fetch,
 #keywordlabel.pack()
 
 
+def on_closing():
+    if messagebox.askokcancel("Quit", "Do you want to quit?"):
+        # fetch().pythonCode.kill() // check how to kill subproccess
+        root.destroy()
 
+
+root.protocol( "WM_DELETE_WINDOW", on_closing )
 
 mainloop()
