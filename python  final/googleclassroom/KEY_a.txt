@@ -1,0 +1,29 @@
+Part I	
+1	b
+2	b
+3	c
+4	b
+5	a
+6	b
+7	c
+8	a
+9	c
+10	d
+11	c
+12	b
+
+Part II	
+1	c
+2	b
+3	c
+4	a
+5	b
+6	d
+7	a
+8	c
+9	b
+10	b
+11	a
+12	a
+13	c
+
